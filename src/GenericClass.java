@@ -1,10 +1,17 @@
 
 public class GenericClass<N,V,P,C> {
 
-	private final N name;
-	private final V value;
-	private final P parent;
-	private final C child;
+	private N name;
+	private V value;
+	private P parent;
+	private C child;
+	
+	public GenericClass(N n, V v, P p, C c) {
+		name = n;
+		value = v;
+		parent = p;
+		child = c;
+	}
 	
 	public N getName() {
 		return name;
@@ -23,19 +30,19 @@ public class GenericClass<N,V,P,C> {
 	}
 	
 	public void setName(N myName) {
-		N name = myName;
+		name = myName;
 	}
 	
 	public void setValue(V myValue) {
-		V value = myValue;
+		value = myValue;
 	}
 	
 	public void setParent(P myParent) {
-		P parent = myParent;
+		parent = myParent;
 	}
 	
 	public void setChild(C myChild) {
-		C child = myChild;
+		child = myChild;
 	}
 	
 
