@@ -82,6 +82,7 @@ public class XMLParser {
 			//read line, if <> new class (have to use split maybe)
 			//assign values
 			// if </> go out from class
+		
 	}
 	
 	
