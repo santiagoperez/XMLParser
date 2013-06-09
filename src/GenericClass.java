@@ -1,13 +1,15 @@
 
-public class GenericClass<N,V,P,C> {
+public class GenericClass<N,V,I,P,C> {
 
 	private N name;
 	private V value;
 	private P parent;
 	private C child;
+	private I id;
 	
-	public GenericClass(N n, V v, P p, C c) {
+	public GenericClass(N n, I i, V v, P p, C c) {
 		name = n;
+		id = i;
 		value = v;
 		parent = p;
 		child = c;

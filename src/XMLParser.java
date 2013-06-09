@@ -36,35 +36,53 @@ public class XMLParser {
 	}
 	
 	// Deletes the chain text in the global XML
-	public void deleteInXML(String text) {
-		xml = xml.substring(0, xml.indexOf(text)) + xml.substring(xml.indexOf(text)+text.length(),xml.length());
+	public String deleteInXML(String completeText , String chain) {
+		completeText = completeText.substring(0, completeText.indexOf(chain)) +
+					completeText.substring(completeText.indexOf(chain)+chain.length(),completeText.length());
+		return completeText;
 	}
 	
 	public void parse(String parent, String part) {
-		String finalLine = "</";
 		
-		if (part.indexOf("<") == -1) {
-			String chainToDelete = "<"+parent+">"+ part + "</"+parent+">";
-			deleteInXML(chainToDelete);
-			return;
-		}
-		
+//		if (part.indexOf("<") == -1) {
+//			return;
+//		}
+		while(part.length() > 0 && xml.contains(part)) {
 			int initNameClass = 1+part.indexOf('<');
 			int endNameClass = part.indexOf('>');
 			String classParsed = part.substring(initNameClass,endNameClass);
+			String classId = "";
+			if (classParsed.contains(" ")) {
+				String[] classPlusId = classParsed.split(" ");
+				classParsed = classPlusId[0];
+				classId = classPlusId[1];
+			}
 			
 			int initValueClass = 1 + endNameClass;
 			int endValueClass = part.indexOf("</" + classParsed + ">");
 			String inside = part.substring(initValueClass,endValueClass);
-			if (!fields.contains(classParsed)) {
-				fields.add(classParsed);
+			//if (!fields.contains(classParsed)) {
+				//fields.add(classParsed);
 				System.out.println("Class: " + classParsed);
 				System.out.println("Inside: " + inside);
 				System.out.println("Parent: " + parent);
 				System.out.println();
+			//}
+			if (inside.contains("<")) {
+				parent = classParsed;
+				parse(parent,inside);
+			} else {
+				String chainToDelete = "<"+classParsed+">"+ inside + "</"+classParsed+">";
+				part = deleteInXML(part,chainToDelete);
+				xml = deleteInXML(xml,chainToDelete);
+				if (part.equals("")) {
+					String chainEnd = "<" + parent + ">" + "</" + parent + ">"; 
+					if (xml.contains(chainEnd)) xml = deleteInXML(xml,chainEnd); // End part
+					return;
+				}
 			}
-			parent = classParsed;
-			parse(parent,inside);
+			parse(parent,part);
+		}
 		
 	}
 	
@@ -85,7 +103,7 @@ public class XMLParser {
 		
 		// Out enters. COMBINE IN THE SAME LOOP!!!
 		for (int i = 1; i < xml.length(); i++) {
-			if (xml.charAt(i) == '\n') {
+			if (xml.charAt(i) == '\n' || xml.charAt(i) == '\t') {
 			} else {
 				prov += xml.charAt(i);
 			}
@@ -121,9 +139,7 @@ public class XMLParser {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-		XMLParser parser = new XMLParser("settings.xml");
+		XMLParser parser = new XMLParser("settings5.xml");
 		parser.go();
 	}
 
